@@ -128,7 +128,6 @@ def LinkParser(LINK):
     return RESULT
 
 def LinkDesigner(LINK):
-
     attributes = LinkParser(LINK)
     MODE = {}
 
@@ -231,7 +230,6 @@ def LinkDesigner(LINK):
         pass
     else:
         MODE["sort"] = "hot"
- 
     return MODE
 
 if __name__ == "__main__":

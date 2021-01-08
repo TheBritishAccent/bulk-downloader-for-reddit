@@ -78,7 +78,6 @@ class ProgramMode:
                 raise InvalidSortingType("Invalid sorting type has given")
         
         programMode["limit"] = self.arguments.limit
-
         return programMode
 
     @staticmethod

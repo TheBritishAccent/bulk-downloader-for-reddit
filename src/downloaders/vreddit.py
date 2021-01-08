@@ -25,12 +25,24 @@ class VReddit:
             videoName = post['POSTID'] + "_video"
             videoURL = post['CONTENTURL']
             audioName = post['POSTID'] + "_audio"
-            audioURL = videoURL[:videoURL.rfind('/')] + '/DASH_audio.mp4'
+            audioURL = [videoURL[:videoURL.rfind('/')] + '/DASH_audio.mp4', videoURL[:videoURL.rfind('/')] + '/audio?source=fallback.mp4']
             
             print(directory,filename,sep="\n")
 
             getFile(videoName,videoName,directory,videoURL,silent=True)
-            getFile(audioName,audioName,directory,audioURL,silent=True)
+            
+            for x in audioURL:
+                try:
+                    getFile(audioName,audioName,directory,x,silent=True)
+                except Exception as e:
+                    pass
+                else: break
+            else:
+                # Could not find a valid audio file, do not try to merge.
+                print("No audio for this video.")
+                os.rename(directory / videoName, directory / filename)
+                return
+
             try:
                 self._mergeAudio(videoName,
                                 audioName,

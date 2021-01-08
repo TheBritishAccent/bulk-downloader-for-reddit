@@ -296,17 +296,19 @@ def matchWithDownloader(submission):
     if 'v.redd.it' in submission.domain:
         bitrates = ["DASH_1080","DASH_720","DASH_600", \
                     "DASH_480","DASH_360","DASH_240"]
-                    
-        for bitrate in bitrates:
-            videoURL = submission.url+"/"+bitrate+".mp4"
+        fallback = ["?source=fallback", ""]
+        
+        for query in fallback:
+            for bitrate in bitrates:
+                videoURL = submission.url+"/"+bitrate+query+".mp4"
 
-            try:    
-                responseCode = urllib.request.urlopen(videoURL).getcode()
-            except urllib.error.HTTPError:
-                responseCode = 0
+                try:    
+                    responseCode = urllib.request.urlopen(videoURL).getcode() #THIS IS THE BUGGY LINE
+                except urllib.error.HTTPError:
+                    responseCode = 0
 
-            if responseCode == 200:
-                return {'TYPE': 'v.redd.it', 'CONTENTURL': videoURL}    
+                if responseCode == 200:
+                    return {'TYPE': 'v.redd.it', 'CONTENTURL': videoURL}    
 
     if 'gfycat' in submission.domain:
         return {'TYPE': 'gfycat'}
